@@ -1,0 +1,182 @@
+Practical no.3
+Microsoft Windows [Version 10.0.26100.4652]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 9.3\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 70
+Server version: 9.3.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use management;
+Database changed
+mysql> desc customer;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cid   | int         | NO   | PRI | NULL    |       |
+| name  | varchar(30) | YES  |     | NULL    |       |
+| city  | varchar(20) | YES  |     | NULL    |       |
+| email | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.607 sec)
+
+mysql> desc product;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| pid   | int         | NO   | PRI | NULL    |       |
+| pname | varchar(20) | YES  |     | NULL    |       |
+| cat   | varchar(20) | YES  |     | NULL    |       |
+| price | float       | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.023 sec)
+
+mysql> desc sale;
++----------+-------+------+-----+---------+-------+
+| Field    | Type  | Null | Key | Default | Extra |
++----------+-------+------+-----+---------+-------+
+| sid      | int   | NO   | PRI | NULL    |       |
+| cid      | int   | YES  | MUL | NULL    |       |
+| pid      | int   | YES  |     | NULL    |       |
+| qty      | int   | YES  |     | NULL    |       |
+| saledate | date  | YES  |     | NULL    |       |
+| totalamt | float | YES  |     | NULL    |       |
++----------+-------+------+-----+---------+-------+
+6 rows in set (0.033 sec)
+
+mysql> insert into customer values(101,'sara','pune','@SA');
+Query OK, 1 row affected (0.172 sec)
+
+mysql> insert into customer values(102,'ritesh','nashik','@RJ');
+Query OK, 1 row affected (0.235 sec)
+
+mysql> insert into customer values(103,'nikita','solapur','@MK');
+Query OK, 1 row affected (0.245 sec)
+
+mysql> insert into customer values(104,'sunita','mumbai','@AK');
+Query OK, 1 row affected (0.234 sec)
+
+mysql> insert into customer values(105,'dalika','delhi','@DA');
+Query OK, 1 row affected (0.222 sec)
+
+mysql> select * from customer;
++-----+--------+---------+-------+
+| cid | name   | city    | email |
++-----+--------+---------+-------+
+| 101 | sara   | pune    | @SA   |
+| 102 | ritesh | nashik  | @RJ   |
+| 103 | nikita | solapur | @MK   |
+| 104 | sunita | mumbai  | @AK   |
+| 105 | dalika | delhi   | @DA   |
++-----+--------+---------+-------+
+5 rows in set (0.012 sec)
+
+mysql> insert into product values(201,'books','funny',400);
+Query OK, 1 row affected (0.225 sec)
+
+mysql> insert into product values(202,'magazine','horror',900);
+Query OK, 1 row affected (0.235 sec)
+
+mysql> insert into product values(203,'booknets','peacefull',500);
+Query OK, 1 row affected (0.234 sec)
+
+mysql> insert into product values(204,'storybook','happy',300);
+Query OK, 1 row affected (0.235 sec)
+
+mysql> insert into product values(205,'notebook','lovable',800);
+Query OK, 1 row affected (0.250 sec)
+
+mysql> select * from product;
++-----+-----------+-----------+-------+
+| pid | pname     | cat       | price |
++-----+-----------+-----------+-------+
+| 201 | books     | funny     |   400 |
+| 202 | magazine  | horror    |   900 |
+| 203 | booknets  | peacefull |   500 |
+| 204 | storybook | happy     |   300 |
+| 205 | notebook  | lovable   |   800 |
++-----+-----------+-----------+-------+
+5 rows in set (0.012 sec)
+
+mysql> insert into sale(sid,cid,pid,qty,totalamt)values(301,105,204,2,'2022-04-12',3000),(302,102,203,7,'2024-09-18',7000),(303,101,202,3,'2025-02-15',2000),(304,103,205,1,'2021-03-19',1000),(305,102,204,4,'2020-08-20',4000);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> INSERT INTO sale(sid, cid, pid, qty, saledate, totalamt)VALUES(301,105,204,2,'2022-04-12',3000),(302,102,203,7,'2024-09-18',7000),(303,101,202,3,'2025-02-15',2000),(304,103,205,1,'2021-03-19',1000),(305,102,204,4,'2020-08-20',4000);
+Query OK, 5 rows affected (0.230 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from sale;
++-----+------+------+------+------------+----------+
+| sid | cid  | pid  | qty  | saledate   | totalamt |
++-----+------+------+------+------------+----------+
+| 301 |  105 |  204 |    2 | 2022-04-12 |     3000 |
+| 302 |  102 |  203 |    7 | 2024-09-18 |     7000 |
+| 303 |  101 |  202 |    3 | 2025-02-15 |     2000 |
+| 304 |  103 |  205 |    1 | 2021-03-19 |     1000 |
+| 305 |  102 |  204 |    4 | 2020-08-20 |     4000 |
++-----+------+------+------+------------+----------+
+5 rows in set (0.010 sec)
+
+mysql> SELECT AVG(totalamt) FROM sale;
++---------------+
+| AVG(totalamt) |
++---------------+
+|          3400 |
++---------------+
+1 row in set (0.240 sec)
+
+mysql> select name from customer where cid in(select cid from sale where totalamt > (select avg (totalamt) from sale));
++--------+
+| name   |
++--------+
+| ritesh |
++--------+
+1 row in set (0.257 sec)
+
+mysql> SELECT DISTINCT cid FROM sale WHERE totalamt > (SELECT AVG(totalamt) FROM sale );
++------+
+| cid  |
++------+
+|  102 |
++------+
+1 row in set (0.010 sec)
+
+mysql> SELECT product.pid,sale.qty FROM product LEFT JOIN sale ON product.pid=sale.pid WHERE sale.pid IS NULL;
++-----+------+
+| pid | qty  |
++-----+------+
+| 201 | NULL |
++-----+------+
+1 row in set (0.209 sec)
+
+mysql> SELECT product.pid,sale.qty FROM product LEFT JOIN sale ON product.pid=sale.pid;
++-----+------+
+| pid | qty  |
++-----+------+
+| 201 | NULL |
+| 202 |    3 |
+| 203 |    7 |
+| 204 |    4 |
+| 204 |    2 |
+| 205 |    1 |
++-----+------+
+6 rows in set (0.013 sec)
+
+mysql> SELECT pid, pname FROM product WHERE product.pid NOT IN (SELECT DISTINCT pid  FROM sale);
++-----+-------+
+| pid | pname |
++-----+-------+
+| 201 | books |
++-----+-------+
+1 row in set (0.013 sec)
+
+mysql> SELECT pid, pname FROM product WHERE product.pid NOT IN (SELECT DISTINCT product.pid  FROM sale);
+Empty set (0.013 sec)
